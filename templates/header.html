@@ -1,17 +1,9 @@
+
 <div class="header">
   <ul class="nav nav-pills pull-right">
-    <li class="active"><a href="#">Home</a></li>
-    <li><a href="#">About</a></li>
-    <li><a href="#">Contact</a></li>
+    <li {% if request.path == "/" %}class="active"{% endif %}><a href="/">Home</a></li>
+    <li {% if request.path == "/about/" %}class="active"{% endif %}><a href="/about/">About</a></li>
+    <li {% if request.path == "/contact/" %}class="active"{% endif %}><a href="/contact/">Contact</a></li>
   </ul>
   <h3 class="text-muted">Phosic</h3>
-</div>
-
-<div class="jumbotron">
-  <h1>Make video!</h1>
-  <p class="lead">
-    This website lets you join MP3 song and a picture, for  free! Just
-    fill the form below and we will mail you the download link  when our
-    robots finish creating your video.
-  </p>
 </div>

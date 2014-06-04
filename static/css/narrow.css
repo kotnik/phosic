@@ -77,3 +77,11 @@ body {
     border-bottom: 0;
   }
 }
+
+/* Active link should be brigter */
+.nav-pills > li.active > a,
+.nav-pills > li.active > a:hover,
+.nav-pills > li.active > a:focus {
+  color: #fff;
+  background-color: #A6D6FF;
+}

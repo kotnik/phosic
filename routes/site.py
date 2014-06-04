@@ -1,6 +1,7 @@
 from app import app
 
 from flask import render_template
+from flask import request
 
 @app.route('/')
 def home():
@@ -11,6 +12,11 @@ def home():
 def about():
     """Render the website's about page."""
     return render_template('about.html')
+
+@app.route('/contact/')
+def contact():
+    """Render website's home page."""
+    return render_template('contact.html')
 
 @app.route('/<file_name>.txt')
 def send_text_file(file_name):
