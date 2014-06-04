@@ -1,12 +1,12 @@
 """
-Flask Documentation:     http://flask.pocoo.org/docs/
-Jinja2 Documentation:    http://jinja.pocoo.org/2/documentation/
-Werkzeug Documentation:  http://werkzeug.pocoo.org/documentation/
 """
 
 import os
-from flask import Flask
 
+from flask import Flask
+from flask.ext.sqlalchemy import SQLAlchemy
+
+here = os.path.abspath(os.path.dirname(__file__))
 
 app = Flask(__name__)
 
@@ -21,7 +21,6 @@ if app.config['DEBUG']:
 # End of configuration.
 
 # Uploads.
-here = os.path.abspath(os.path.dirname(__file__))
 app.config['UPLOAD_FOLDER'] = os.environ.get('UPLOAD_FOLDER', os.path.join(here, 'uploads'))
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
 
@@ -29,5 +28,11 @@ app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
 app.config['RECAPTCHA_USE_SSL'] = False
 app.config['RECAPTCHA_PUBLIC_KEY'] = '6LcrufQSAAAAALwUQKlvx2YKvMIQZ1mabsOgxTJR'
 app.config['RECAPTCHA_PRIVATE_KEY'] = '6LcrufQSAAAAAEfnYns8o-LPGjlD0s6u6veYWEc0'
+
+# Database.
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(here, 'app.db')
+app.config['SQLALCHEMY_MIGRATE_REPO'] = os.path.join(here, 'db_repository')
+db = SQLAlchemy(app)
+from database import models
 
 config = app.config

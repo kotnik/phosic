@@ -3,4 +3,5 @@
 *.egg-info
 *.py[co]
 
+app.db
 uploads/*

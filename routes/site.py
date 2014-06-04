@@ -1,6 +1,9 @@
 import os
+import random
+import string
+import datetime
 
-from flask import render_template, redirect, url_for, abort
+from flask import render_template, redirect, url_for
 from flask_wtf import Form, RecaptchaField
 from flask_wtf.file import FileField, FileAllowed, FileRequired
 from werkzeug import secure_filename
@@ -8,10 +11,10 @@ from werkzeug import secure_filename
 from wtforms.fields.html5 import EmailField
 from wtforms.validators import email, DataRequired
 
-from app import app
+from app import app, db, models
 
 
-class MyForm(Form):
+class JobForm(Form):
     email = EmailField('Email', validators=[ DataRequired(), email() ])
     mp3 = FileField('MP3', validators=[
             FileRequired(), FileAllowed(['mp3'], 'Please upload MP3 only!')
@@ -23,28 +26,49 @@ class MyForm(Form):
     recaptcha = RecaptchaField()
 
 
+def generate_uniqid(length):
+    return ''.join(
+        random.choice(string.lowercase+string.digits) for i in range(length)
+    )
+
 @app.route('/',  methods=['GET', 'POST'])
 def home():
     """Render website's home page."""
-    form = MyForm()
+    form = JobForm()
 
     if form.validate_on_submit():
-        mp3filename = secure_filename(form.mp3.data.filename)
-        form.mp3.data.save(os.path.join(app.config['UPLOAD_FOLDER'] + "/" + mp3filename))
-        picfilename = secure_filename(form.pic.data.filename)
-        form.pic.data.save(os.path.join(app.config['UPLOAD_FOLDER'] + "/" + picfilename))
-        return redirect(url_for('jobs', job_id=1))
+        uniqid = generate_uniqid(10)
+        jobdir = app.config['UPLOAD_FOLDER'] + "/" + uniqid + "/"
+        os.makedirs(jobdir)
+
+        mp3_filename = secure_filename(form.mp3.data.filename)
+        form.mp3.data.save(jobdir + uniqid + ".mp3")
+        pic_filename = secure_filename(form.pic.data.filename)
+        _, pic_extension = os.path.splitext(pic_filename)
+        form.pic.data.save(jobdir + uniqid + pic_extension)
+
+        # TODO: Send job to processing
+
+        # Create database item
+        job = models.Job(
+            uniqid=uniqid,
+            email=form.email.data,
+            created=datetime.datetime.utcnow(),
+            mp3_name=mp3_filename[:255],
+            pic_name=pic_filename[:255],
+        )
+        db.session.add(job)
+        db.session.commit()
+
+        return redirect(url_for('jobs', job_id=job.uniqid))
 
     return render_template('home.html', form=form)
 
 @app.route('/jobs/<job_id>')
 def jobs(job_id):
     """Render the website's about page."""
-    print "Job ID: %s" % job_id
-    if job_id != "1":
-        abort(404)
-
-    return render_template('job.html')
+    job = models.Job.query.filter_by(uniqid=job_id).first_or_404()
+    return render_template('job.html', job=job)
 
 @app.route('/about/')
 def about():

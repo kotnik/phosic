@@ -5,6 +5,12 @@ flask
 Flask-WTF
 
 # ----------------------
+# Database
+# ----------------------
+flask-sqlalchemy
+sqlalchemy-migrate
+
+# ----------------------
 # Production Server
 # ----------------------
 gunicorn
