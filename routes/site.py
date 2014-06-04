@@ -1,6 +1,6 @@
 import os
 
-from flask import render_template, request, redirect, url_for
+from flask import render_template, request, redirect, url_for, abort
 from werkzeug import secure_filename
 
 from app import app
@@ -26,6 +26,9 @@ def home():
 def jobs(job_id):
     """Render the website's about page."""
     print "Job ID: %s" % job_id
+    if job_id != "1":
+        abort(404)
+
     return render_template('job.html')
 
 @app.route('/about/')
