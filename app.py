@@ -18,4 +18,9 @@ app.config['DEBUG'] = bool(os.environ.get('DEBUG', False))
 app.config['DEBUG'] = True
 # End of configuration.
 
+# Uploads.
+here = os.path.abspath(os.path.dirname(__file__))
+app.config['UPLOAD_FOLDER'] = os.environ.get('UPLOAD_FOLDER', os.path.join(here, 'uploads'))
+app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
+
 config = app.config
