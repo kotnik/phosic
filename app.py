@@ -10,13 +10,12 @@ from flask import Flask
 
 app = Flask(__name__)
 
-app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'this_should_be_configured')
+app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', '\xb0k\xd0\x03\xd9\x0b*\xa0UE\x80\x93BbIT\xa3\xe6\xef\x7fq\xf2\xf9F')
 app.config['PORT'] = int(os.environ.get('PORT', 8000))
 app.config['DEBUG'] = bool(os.environ.get('DEBUG', False))
 
 # Configuration to put in file.
 app.config['DEBUG'] = True
 # End of configuration.
-
 
 config = app.config
