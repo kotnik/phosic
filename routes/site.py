@@ -1,26 +1,40 @@
 import os
 
-from flask import render_template, request, redirect, url_for, abort
+from flask import render_template, redirect, url_for, abort
+from flask_wtf import Form
+from flask_wtf.file import FileField, FileAllowed, FileRequired
 from werkzeug import secure_filename
+
+from wtforms.fields.html5 import EmailField
+from wtforms.validators import email, DataRequired
 
 from app import app
 
-ALLOWED_EXTS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'])
 
-def allowed_file(filename):
-    return '.' in filename and filename.rsplit('.', 1)[1] in ALLOWED_EXTS
+class MyForm(Form):
+    email = EmailField('Email', validators=[ DataRequired(), email() ])
+    mp3 = FileField('MP3', validators=[
+            FileRequired(), FileAllowed(['mp3'], 'Please upload MP3 only!')
+        ])
+    pic = FileField('Picture', validators=[
+            FileRequired(), FileAllowed(['jpg', 'png', 'jpeg'], 'Please upload images only!')
+        ]
+    )
+
 
 @app.route('/',  methods=['GET', 'POST'])
 def home():
     """Render website's home page."""
-    if request.method == 'POST':
-        print request.files
-        mp3File = request.files.get('mp3File', None)
-        if mp3File and allowed_file(mp3File.filename):
-            filename = secure_filename(mp3File.filename)
-            mp3File.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-            return redirect(url_for('jobs', job_id=1))
-    return render_template('home.html')
+    form = MyForm()
+
+    if form.validate_on_submit():
+        mp3filename = secure_filename(form.mp3.data.filename)
+        form.mp3.data.save(os.path.join(app.config['UPLOAD_FOLDER'] + "/" + mp3filename))
+        picfilename = secure_filename(form.pic.data.filename)
+        form.pic.data.save(os.path.join(app.config['UPLOAD_FOLDER'] + "/" + picfilename))
+        return redirect(url_for('jobs', job_id=1))
+
+    return render_template('home.html', form=form)
 
 @app.route('/jobs/<job_id>')
 def jobs(job_id):

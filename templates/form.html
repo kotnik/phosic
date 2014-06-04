@@ -1,0 +1,35 @@
+{% macro forminput(field, helpblock='', placeholder='', class='') -%}
+  <div class="form-group {% if field.errors|length > 0 %}has-error{% endif %}">
+    <label for="mp3" class="col-sm-2 control-label">{{ field.label }}</label>
+    <div class="col-sm-10">
+      {% if placeholder %}
+        {{ field(placeholder=placeholder, class=class) }}
+      {% else %}
+        {{ field(class=class) }}
+      {% endif %}
+      {% if field.errors %}
+        {% for error in field.errors %}
+          <span class="help-block">{{ error }}</span><br>
+        {% endfor %}
+      {% endif %}
+      {% if helpblock %}
+      <span class="help-block">{{ helpblock }}</span>
+      {% endif %}
+    </div>
+  </div>
+{%- endmacro %}
+
+<form class="form-horizontal" role="form" enctype="multipart/form-data", method="post", action="{{ url_for('home') }}">
+
+  {{ form.hidden_tag() }}
+  {{ forminput(form.email, helpblock='We will send you download link here, nothing more.', placeholder='Please enter your email', class='form-control') }}
+  {{ forminput(form.mp3) }}
+  {{ forminput(form.pic) }}
+
+  <div class="form-group">
+    <span class="col-sm-2">&nbsp</span>
+    <div class="col-sm-10">
+      <button type="submit" class="btn btn-default">Submit</button>
+    </div>
+  </div>
+</form>
