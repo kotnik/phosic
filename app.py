@@ -16,11 +16,18 @@ app.config['DEBUG'] = bool(os.environ.get('DEBUG', False))
 
 # Configuration to put in file.
 app.config['DEBUG'] = True
+if app.config['DEBUG']:
+    app.testing = True
 # End of configuration.
 
 # Uploads.
 here = os.path.abspath(os.path.dirname(__file__))
 app.config['UPLOAD_FOLDER'] = os.environ.get('UPLOAD_FOLDER', os.path.join(here, 'uploads'))
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
+
+# Recapthca.
+app.config['RECAPTCHA_USE_SSL'] = False
+app.config['RECAPTCHA_PUBLIC_KEY'] = '6LcrufQSAAAAALwUQKlvx2YKvMIQZ1mabsOgxTJR'
+app.config['RECAPTCHA_PRIVATE_KEY'] = '6LcrufQSAAAAAEfnYns8o-LPGjlD0s6u6veYWEc0'
 
 config = app.config

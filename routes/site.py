@@ -1,7 +1,7 @@
 import os
 
 from flask import render_template, redirect, url_for, abort
-from flask_wtf import Form
+from flask_wtf import Form, RecaptchaField
 from flask_wtf.file import FileField, FileAllowed, FileRequired
 from werkzeug import secure_filename
 
@@ -20,6 +20,7 @@ class MyForm(Form):
             FileRequired(), FileAllowed(['jpg', 'png', 'jpeg'], 'Please upload images only!')
         ]
     )
+    recaptcha = RecaptchaField()
 
 
 @app.route('/',  methods=['GET', 'POST'])
