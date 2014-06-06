@@ -1,7 +1,9 @@
-from site import home, about, send_text_file
+from site import home, jobs, about, contact, send_text_file
 
 __all__ = [
-    'home',
-    'about',
-    'send_text_file'
+    "home",
+    "jobs",
+    "about",
+    "contact",
+    "send_text_file",
 ]

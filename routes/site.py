@@ -31,6 +31,19 @@ def generate_uniqid(length):
         random.choice(string.lowercase+string.digits) for i in range(length)
     )
 
+@app.after_request
+def add_header(response):
+    """
+    Add headers to both force latest IE rendering engine or Chrome Frame.
+    """
+    response.headers['X-UA-Compatible'] = 'IE=Edge,chrome=1'
+    return response
+
+@app.errorhandler(404)
+def page_not_found(error):
+    """Custom 404 page."""
+    return render_template('404.html'), 404
+
 @app.route('/',  methods=['GET', 'POST'])
 def home():
     """Render website's home page."""
