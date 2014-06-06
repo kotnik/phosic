@@ -1,48 +1,13 @@
 import os
-import random
-import string
 import datetime
 
 from flask import render_template, redirect, url_for
-from flask_wtf import Form, RecaptchaField
-from flask_wtf.file import FileField, FileAllowed, FileRequired
 from werkzeug import secure_filename
 
-from wtforms.fields.html5 import EmailField
-from wtforms.validators import email, DataRequired
-
 from app import app, db, models
+from forms import JobForm
+from utils import generate_uniqid
 
-
-class JobForm(Form):
-    email = EmailField('Email', validators=[ DataRequired(), email() ])
-    mp3 = FileField('MP3', validators=[
-            FileRequired(), FileAllowed(['mp3'], 'Please upload MP3 only!')
-        ])
-    pic = FileField('Picture', validators=[
-            FileRequired(), FileAllowed(['jpg', 'png', 'jpeg'], 'Please upload images only!')
-        ]
-    )
-    recaptcha = RecaptchaField()
-
-
-def generate_uniqid(length):
-    return ''.join(
-        random.choice(string.lowercase+string.digits) for i in range(length)
-    )
-
-@app.after_request
-def add_header(response):
-    """
-    Add headers to both force latest IE rendering engine or Chrome Frame.
-    """
-    response.headers['X-UA-Compatible'] = 'IE=Edge,chrome=1'
-    return response
-
-@app.errorhandler(404)
-def page_not_found(error):
-    """Custom 404 page."""
-    return render_template('404.html'), 404
 
 @app.route('/',  methods=['GET', 'POST'])
 def home():
@@ -98,3 +63,16 @@ def send_text_file(file_name):
     """Send your static text file."""
     file_dot_text = file_name + '.txt'
     return app.send_static_file(file_dot_text)
+
+@app.after_request
+def add_header(response):
+    """
+    Add headers to both force latest IE rendering engine or Chrome Frame.
+    """
+    response.headers['X-UA-Compatible'] = 'IE=Edge,chrome=1'
+    return response
+
+@app.errorhandler(404)
+def page_not_found(error):
+    """Custom 404 page."""
+    return render_template('404.html'), 404
