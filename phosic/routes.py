@@ -20,12 +20,16 @@ def home():
         os.makedirs(jobdir)
 
         mp3_filename = secure_filename(form.mp3.data.filename)
-        form.mp3.data.save(jobdir + uniqid + ".mp3")
+        mp3_new_name = jobdir + uniqid + ".mp3"
+        form.mp3.data.save(mp3_new_name)
         pic_filename = secure_filename(form.pic.data.filename)
         _, pic_extension = os.path.splitext(pic_filename)
-        form.pic.data.save(jobdir + uniqid + pic_extension)
+        pic_new_name = jobdir + uniqid + pic_extension
+        form.pic.data.save(pic_new_name)
+        video_output = jobdir + uniqid + ".mkv"
 
         task = tasks.make_video.apply_async(
+            (uniqid, pic_new_name, mp3_new_name, video_output),
             countdown=app.config['PHOSIC_TASK_DELAY'],
             expires=app.config['PHOSIC_TASK_MAX_EXECUTION_TIME']
         )
@@ -36,6 +40,7 @@ def home():
             task_uuid=task.id,
             email=form.email.data,
             created=datetime.datetime.utcnow(),
+            expires=datetime.datetime.utcnow() + datetime.timedelta(days=1),
             mp3_name=mp3_filename[:255],
             pic_name=pic_filename[:255],
         )
@@ -50,7 +55,14 @@ def home():
 def jobs(job_id):
     """Render the website's about page."""
     job = models.Job.query.filter_by(uniqid=job_id).first_or_404()
-    return render_template('job.html', job=job)
+
+    task = tasks.make_video.AsyncResult(job.task_uuid)
+    if task.ready():
+        if task.get():
+            return render_template('job-ready.html', job=job)
+        return render_template('job-failed.html', job=job)
+
+    return render_template('job-pending.html', job=job)
 
 @app.route('/about/')
 def about():
