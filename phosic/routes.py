@@ -55,11 +55,13 @@ def home():
 def jobs(job_id):
     """Render the website's about page."""
     job = models.Job.query.filter_by(uniqid=job_id).first_or_404()
+    jobdir = app.config['UPLOAD_FOLDER'] + "/" + job_id + "/"
 
     task = tasks.make_video.AsyncResult(job.task_uuid)
     if task.ready():
         if task.get():
-            return render_template('job-ready.html', job=job)
+            if os.path.exists(jobdir + job_id + ".mkv"):
+                return render_template('job-ready.html', job=job)
         return render_template('job-failed.html', job=job)
 
     return render_template('job-pending.html', job=job)

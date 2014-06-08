@@ -4,11 +4,17 @@
 {% endblock %}
 
 {% block main %}
-job failed
 
-<p>I am a job {{ job.id }}</p>
-<p>My uuid is {{ job.task_uuid }}</p>
-<p>My pic is: {{ job.pic_name }}</p>
-<p>My mp3 is: {{ job.mp3_name }}</p>
+<div class="row">
+  <div class="col-lg-12">
+
+    <div class="alert alert-danger">Joining failed!</div>
+
+    <p class="text-danger">Oh, snap, something went terribly wrong and we couldn't make your video.</p>
+
+    <p>Please try again later. You can send us this <code>{{ job.task_uuid }}</code> to help us figure out what happened. If you chose to do so, please send it to us before {{ job.expires.strftime('%d %b %Y at %H:%M') }}, otherwise all about this video will be deleted by then.</p>
+
+  </div>
+</div>
 
 {% endblock %}
