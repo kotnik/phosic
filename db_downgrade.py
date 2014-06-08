@@ -1,7 +1,7 @@
 #!/usr/bin/env python2
 
 from migrate.versioning import api
-from app import config
+from flask_app import config
 
 v = api.db_version(
     config['SQLALCHEMY_DATABASE_URI'], config['SQLALCHEMY_MIGRATE_REPO']

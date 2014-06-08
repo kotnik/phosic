@@ -4,10 +4,10 @@ import datetime
 from flask import render_template, redirect, url_for
 from werkzeug import secure_filename
 
-from app import app, db, models
+from flask_app import app, db, models
 from forms import JobForm
 from utils import generate_uniqid
-
+import tasks
 
 @app.route('/',  methods=['GET', 'POST'])
 def home():
@@ -25,11 +25,15 @@ def home():
         _, pic_extension = os.path.splitext(pic_filename)
         form.pic.data.save(jobdir + uniqid + pic_extension)
 
-        # TODO: Send job to processing
+        task = tasks.make_video.apply_async(
+            countdown=app.config['PHOSIC_TASK_DELAY'],
+            expires=app.config['PHOSIC_TASK_MAX_EXECUTION_TIME']
+        )
 
         # Create database item
         job = models.Job(
             uniqid=uniqid,
+            task_uuid=task.id,
             email=form.email.data,
             created=datetime.datetime.utcnow(),
             mp3_name=mp3_filename[:255],

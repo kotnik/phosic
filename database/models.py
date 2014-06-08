@@ -1,4 +1,4 @@
-from app import db
+from flask_app import db
 
 JOB_PENDING = 0
 JOB_STARTED = 1
@@ -8,6 +8,7 @@ JOB_DELETED = 3
 
 class Job(db.Model):
     id = db.Column(db.Integer, primary_key=True)
+    task_uuid = db.Column(db.String(36), index=True, unique=True)
     created = db.Column(db.DateTime)
     finished = db.Column(db.DateTime)
     expires = db.Column(db.DateTime)

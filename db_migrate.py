@@ -2,7 +2,7 @@
 
 import imp
 from migrate.versioning import api
-from app import db, config
+from flask_app import db, config
 
 migration = config['SQLALCHEMY_MIGRATE_REPO'] + '/versions/%03d_migration.py' % (api.db_version(config['SQLALCHEMY_DATABASE_URI'], config['SQLALCHEMY_MIGRATE_REPO']) + 1)
 tmp_module = imp.new_module('old_model')

@@ -11,6 +11,11 @@ flask-sqlalchemy
 sqlalchemy-migrate
 
 # ----------------------
+# Celery
+# ----------------------
+celery
+
+# ----------------------
 # Production Server
 # ----------------------
 gunicorn

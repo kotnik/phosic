@@ -4,7 +4,7 @@ import os.path
 
 from migrate.versioning import api
 
-from app import db, config
+from flask_app import db, config
 
 db.create_all()
 
