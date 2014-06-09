@@ -61,7 +61,7 @@ def check_call(*args, **kwargs):
 def setup_logging(verbose=True, stderr=True, color=True, syslog=True, appname=None):
     """ Sets logging format. """
 
-    setproctitle.setproctitle("phosic")
+    setproctitle.setproctitle(appname)
 
     logging.getLogger().setLevel(logging.DEBUG)
 
