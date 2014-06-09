@@ -90,15 +90,6 @@ def setup_logging(verbose=True, stderr=True, color=True, syslog=True, appname=No
         syslog.setFormatter(syslog_format)
         logging.getLogger().addHandler(syslog)
 
-    # Disable various verbose logging.
-    logging.getLogger('ZooKeeper').setLevel(logging.ERROR)
-    logging.getLogger('boto').setLevel(logging.CRITICAL)
-    logging.getLogger('kazoo.protocol.connection').setLevel(logging.WARNING)
-    logging.getLogger('kazoo.client').setLevel(logging.WARNING)
-    logging.getLogger('protean').setLevel(logging.INFO)
-    logging.getLogger('protean.storage').setLevel(logging.WARNING)
-
-
 COLORS = {
     'DEBUG': Style.DIM,
     'INFO': Style.NORMAL,
