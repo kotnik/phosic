@@ -4,7 +4,14 @@
 {% endblock %}
 
 {% block main %}
-job ready
+
+<p>Your video is ready!</p>
+
+<p>
+  <a href="{{ url_for('download_file', job_id=job.uniqid) }}" class="btn btn-lg btn-success">
+    <span class="glyphicon glyphicon-download"></span> Download video
+  </a>
+</p>
 
 {% if config["DEBUG"] %}
 {% include 'job-info.html' %}

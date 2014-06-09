@@ -2,7 +2,7 @@ import os
 import datetime
 import logging
 
-from flask import render_template, redirect, url_for
+from flask import render_template, redirect, url_for, send_from_directory, abort
 from werkzeug import secure_filename
 
 from flask_app import app, db, models
@@ -54,7 +54,8 @@ def home():
 
     return render_template('home.html', form=form)
 
-@app.route('/jobs/<job_id>')
+@app.route('/jobs/<job_id>/')
+@app.route('/jobs/<job_id>/view')
 def jobs(job_id):
     """Render job page."""
     job = models.Job.query.filter_by(uniqid=job_id).first_or_404()
@@ -68,6 +69,20 @@ def jobs(job_id):
         return render_template('job-failed.html', job=job)
 
     return render_template('job-pending.html', job=job, started=True if job.state == models.JOB_STARTED else False)
+
+@app.route('/jobs/<job_id>/download')
+def download_file(job_id):
+    if '.' in job_id or job_id.startswith('/'):
+        abort(404)
+    job = models.Job.query.filter_by(uniqid=job_id).first_or_404()
+
+    if job.state != models.JOB_FINISHED:
+        abort(404)
+
+    video_file = job_id + "/" + job_id + ".mkv"
+    return send_from_directory(app.config['UPLOAD_FOLDER'], video_file,
+                               attachment_filename="phosic-video.mkv",
+                               as_attachment=True, mimetype='video/x-matroska')
 
 @app.route('/about/')
 def about():
