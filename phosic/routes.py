@@ -63,11 +63,11 @@ def jobs(job_id):
     task = tasks.make_video.AsyncResult(job.task_uuid)
     if task.ready():
         if task.get():
-            if os.path.exists(jobdir + job_id + ".mkv"):
+            if os.path.exists(jobdir + job_id + ".mkv") and job.state != models.JOB_FAILED:
                 return render_template('job-ready.html', job=job)
         return render_template('job-failed.html', job=job)
 
-    return render_template('job-pending.html', job=job)
+    return render_template('job-pending.html', job=job, started=True if job.state == models.JOB_STARTED else False)
 
 @app.route('/about/')
 def about():

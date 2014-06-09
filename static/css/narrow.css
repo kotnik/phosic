@@ -85,3 +85,8 @@ body {
   color: #fff;
   background-color: #A6D6FF;
 }
+
+/* Debuging */
+.debug-info {
+  border:1px dashed red;
+}
