@@ -1,5 +1,6 @@
 import os
 import datetime
+import logging
 
 from flask import render_template, redirect, url_for
 from werkzeug import secure_filename
@@ -8,6 +9,8 @@ from flask_app import app, db, models
 from forms import JobForm
 from utils import generate_uniqid
 import tasks
+
+log = logging.getLogger(__name__)
 
 @app.route('/',  methods=['GET', 'POST'])
 def home():
@@ -53,7 +56,7 @@ def home():
 
 @app.route('/jobs/<job_id>')
 def jobs(job_id):
-    """Render the website's about page."""
+    """Render job page."""
     job = models.Job.query.filter_by(uniqid=job_id).first_or_404()
     jobdir = app.config['UPLOAD_FOLDER'] + "/" + job_id + "/"
 
@@ -68,12 +71,12 @@ def jobs(job_id):
 
 @app.route('/about/')
 def about():
-    """Render the website's about page."""
+    """Render about page."""
     return render_template('about.html')
 
 @app.route('/contact/')
 def contact():
-    """Render website's home page."""
+    """Render contact page."""
     return render_template('contact.html')
 
 @app.route('/<file_name>.txt')

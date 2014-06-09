@@ -17,7 +17,7 @@ class Job(db.Model):
     mp3_name = db.Column(db.String(255), default="")
     pic_name = db.Column(db.String(255), default="")
     vid_name = db.Column(db.String(255), default="")
-    finished = db.Column(db.SmallInteger, default=JOB_PENDING)
+    state = db.Column(db.SmallInteger, default=JOB_PENDING)
 
     def __repr__(self):
         return '<Job %r>' % (self.uniqid)
