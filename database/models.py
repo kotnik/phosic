@@ -2,8 +2,9 @@ from flask_app import db
 
 JOB_PENDING = 0
 JOB_STARTED = 1
-JOB_FINISHED = 2
-JOB_DELETED = 3
+JOB_FAILED = 2
+JOB_FINISHED = 3
+JOB_DELETED = 4
 
 
 class Job(db.Model):
