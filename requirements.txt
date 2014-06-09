@@ -16,6 +16,12 @@ sqlalchemy-migrate
 celery
 
 # ----------------------
+# Helpers
+# ----------------------
+colorama
+setproctitle
+
+# ----------------------
 # Production Server
 # ----------------------
 gunicorn
