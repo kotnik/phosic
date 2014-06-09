@@ -14,6 +14,10 @@ def calculate_statistics(x, y):
     return x + y
 
 @celery.task()
+def delete_expired():
+    return True
+
+@celery.task()
 def make_video(job_id, pic, mp3, out):
     job = models.Job.query.filter_by(uniqid=job_id).first()
     if not job:
