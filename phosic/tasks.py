@@ -1,9 +1,10 @@
 import os
 import datetime
 import logging
+import shutil
 from subprocess import CalledProcessError
 
-from flask_app import make_celery, models, db
+from flask_app import make_celery, models, db, config
 from utils import check_call
 from sqlalchemy.sql import func
 
@@ -25,7 +26,7 @@ def calculate_statistics():
             db.session.add(stats[stat_name])
 
     # Count created videos.
-    s_created = models.Job.query.filter_by(state=((models.JOB_FINISHED) | (models.JOB_DELETED))).count()
+    s_created = models.Job.query.filter((models.Job.state == models.JOB_FINISHED) | (models.Job.state == models.JOB_DELETED)).count()
     stats['created'].value = "%s" % s_created
 
     # Sum downloads.
@@ -33,12 +34,12 @@ def calculate_statistics():
     stats['downloaded'].value = "%s" % s_downloaded
 
     # Count active videos.
-    s_active = models.Job.query.filter_by(state=((models.JOB_PENDING) | (models.JOB_STARTED))).count()
+    s_active = models.Job.query.filter((models.Job.state == models.JOB_PENDING) | (models.Job.state == models.JOB_STARTED)).count()
     stats['active'] = s_active
 
     # Sum data uploaded.
     stats['data_upload'].value = 0
-    for job in models.Job.query.filter_by(state=((models.JOB_FINISHED) | (models.JOB_DELETED))).all():
+    for job in models.Job.query.filter((models.Job.state == models.JOB_FINISHED) | (models.Job.state == models.JOB_DELETED)).all():
         stats['data_upload'].value = stats['data_upload'].value + job.vid_size * job.download_count
 
     db.session.commit()
@@ -46,6 +47,15 @@ def calculate_statistics():
 
 @celery.task()
 def delete_expired():
+    for job in models.Job.query.filter((models.Job.state == models.JOB_FINISHED) & (models.Job.expires > datetime.datetime.utcnow())).all():
+        job.state = models.JOB_DELETED
+        job.deleted = datetime.datetime.utcnow()
+        db.session.commit()
+        job_dir = config['UPLOAD_FOLDER'] + "/" + job.uniqid
+        if os.path.exists(job_dir):
+            shutil.rmtree(job_dir)
+        log.info("Deleted %s" % job.uniqid)
+
     return True
 
 @celery.task()

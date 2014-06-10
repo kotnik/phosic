@@ -12,6 +12,7 @@ class Job(db.Model):
     task_uuid = db.Column(db.String(36), index=True, unique=True)
     created = db.Column(db.DateTime)
     finished = db.Column(db.DateTime)
+    deleted = db.Column(db.DateTime)
     expires = db.Column(db.DateTime)
     uniqid = db.Column(db.String(10), index=True, unique=True)
     email = db.Column(db.String(120))

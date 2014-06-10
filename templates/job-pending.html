@@ -6,9 +6,11 @@
 {% block main %}
 
 {% if started %}
-<p>We are currently making your video, come back shortly!</p>
+<p>We are currently making your video!</p>
+<p>Please reload this page from time to time. When your video is created, you will have a download link here.</p>
 {% else %}
 <p>We got your files and we are about to start making your video!</p>
+<p>Please reload this page from time to time. When your video is created, you will have a download link here.</p>
 {% endif %}
 
 {% if config["DEBUG"] %}
