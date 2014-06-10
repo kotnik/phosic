@@ -7,7 +7,7 @@ from werkzeug import secure_filename
 
 from flask_app import app, db, models
 from forms import JobForm
-from utils import generate_uniqid
+from utils import generate_uniqid, filesizeformat
 import tasks
 
 log = logging.getLogger(__name__)
@@ -74,10 +74,13 @@ def jobs(job_id):
 def download_file(job_id):
     if '.' in job_id or job_id.startswith('/'):
         abort(404)
-    job = models.Job.query.filter_by(uniqid=job_id).first_or_404()
 
+    job = models.Job.query.filter_by(uniqid=job_id).first_or_404()
     if job.state != models.JOB_FINISHED:
         abort(404)
+
+    job.download_count = job.download_count + 1
+    db.session.commit()
 
     video_file = job_id + "/" + job_id + ".mkv"
     return send_from_directory(app.config['UPLOAD_FOLDER'], video_file,
@@ -92,6 +95,11 @@ def about():
     stats['downloaded'] = 0
     stats['active'] = 0
     stats['data_upload'] = 0
+    for stat in db.session.query(models.Stat):
+        stats[stat.name] = stat.value
+    stats['data_upload'] = filesizeformat(stats['data_upload'])
+    if not stats['active']:
+        stats['active'] = "Idle"
 
     return render_template('about.html', stats=stats)
 

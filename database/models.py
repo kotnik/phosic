@@ -18,7 +18,18 @@ class Job(db.Model):
     mp3_name = db.Column(db.String(255), default="")
     pic_name = db.Column(db.String(255), default="")
     vid_name = db.Column(db.String(255), default="")
+    vid_size = db.Column(db.Integer, default=0)
     state = db.Column(db.SmallInteger, default=JOB_PENDING)
+    download_count = db.Column(db.Integer, default=0)
 
     def __repr__(self):
         return '<Job %r>' % (self.uniqid)
+
+
+class Stat(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(36), index=True, unique=True)
+    value = db.Column(db.String(255), default="")
+
+    def __repr__(self):
+        return '<Stats %r>' % (self.id)

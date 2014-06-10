@@ -4,6 +4,7 @@ import os
 import sys
 import logging
 import logging.handlers
+import math
 import subprocess
 from subprocess import CalledProcessError
 
@@ -57,6 +58,19 @@ def check_call(*args, **kwargs):
         raise exc
 
     return stdout_data.strip()
+
+def filesizeformat(bytes, precision=2):
+    """Returns a humanized string for a given amount of bytes"""
+    bytes = int(bytes)
+    if bytes is 0:
+        return '0 bytes'
+    log = math.floor(math.log(bytes, 1024))
+    return "%.*f%s" % (
+        precision,
+        bytes / math.pow(1024, log),
+        ['bytes', 'kb', 'mb', 'gb', 'tb','pb', 'eb', 'zb', 'yb']
+        [int(log)]
+    )
 
 def setup_logging(verbose=True, stderr=True, color=True, syslog=True, appname=None):
     """ Sets logging format. """
