@@ -35,7 +35,7 @@ def calculate_statistics():
 
     # Count active videos.
     s_active = models.Job.query.filter((models.Job.state == models.JOB_PENDING) | (models.Job.state == models.JOB_STARTED) | (models.Job.state == models.JOB_FINISHED)).count()
-    stats['active'] = s_active
+    stats['active'].value = "%s" % s_active
 
     # Sum data uploaded.
     stats['data_upload'].value = 0

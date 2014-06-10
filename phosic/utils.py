@@ -65,10 +65,10 @@ def filesizeformat(bytes, precision=2):
     if bytes is 0:
         return '0 bytes'
     log = math.floor(math.log(bytes, 1024))
-    return "%.*f%s" % (
+    return "%.*f %s" % (
         precision,
         bytes / math.pow(1024, log),
-        ['bytes', 'kb', 'mb', 'gb', 'tb','pb', 'eb', 'zb', 'yb']
+        ['bytes', 'KB', 'MB', 'GB', 'TB','PB', 'EB', 'ZB', 'YB']
         [int(log)]
     )
 

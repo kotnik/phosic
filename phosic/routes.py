@@ -101,7 +101,7 @@ def about():
     for stat in db.session.query(models.Stat):
         stats[stat.name] = stat.value
     stats['data_upload'] = filesizeformat(stats['data_upload'])
-    if not stats['active']:
+    if stats['active'] == 0:
         stats['active'] = "Idle"
 
     return render_template('about.html', stats=stats)

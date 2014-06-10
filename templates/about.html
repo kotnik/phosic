@@ -25,7 +25,7 @@
 <li>Come back to us when you want to create new video!</li>
 </ul>
 
-<p>Note: if you don't pick up your video you should know that we will delete all we know about your request after one day has passed.</p>
+<p>Note: if you don't pick up your video you should know that we will delete everything we have after one day.</p>
 
 <h3>Techonology</h3>
 
@@ -33,9 +33,23 @@
 
 <h3>Statistics</h3>
 
-<p>Videos created: {{ stats['created'] }}</p>
-<p>Videos downloaded: {{ stats['downloaded'] }}</p>
-<p>Currently active: {{ stats['active'] }}</p>
-<p>Data uploaded: {{ stats['data_upload'] }}</p>
+<div class="row">
+    <div class="col-xs-6 text-right">Videos created</div>
+    <div class="col-xs-6">{{ stats['created'] }}</div>
+</div>
+<div class="row">
+    <div class="col-xs-6 text-right">Videos downloaded</div>
+    <div class="col-xs-6">{{ stats['downloaded'] }}</div>
+</div>
+<div class="row">
+    <div class="col-xs-6 text-right">Currently active</div>
+    <div class="col-xs-6">{{ stats['active'] }}</div>
+</div>
+<div class="row">
+    <div class="col-xs-6 text-right">Data uploaded</div>
+    <div class="col-xs-6">{{ stats['data_upload'] }}</div>
+</div>
+
+<p>This numbers are calculated every {{ config["PHOSIC_STAT_MINUTES"] }} minutes</p>
 
 {% endblock %}
