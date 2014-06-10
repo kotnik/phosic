@@ -87,7 +87,13 @@ def download_file(job_id):
 @app.route('/about/')
 def about():
     """Render about page."""
-    return render_template('about.html')
+    stats = {}
+    stats['created'] = 0
+    stats['downloaded'] = 0
+    stats['active'] = 0
+    stats['data_upload'] = 0
+
+    return render_template('about.html', stats=stats)
 
 @app.route('/contact/')
 def contact():

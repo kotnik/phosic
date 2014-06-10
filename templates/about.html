@@ -4,5 +4,38 @@
 {% endblock %}
 
 {% block main %}
-About.
+
+<h3>About</h3>
+
+<p>You can use this service if you want to have a video from your favourite MP3 and a single static photo.</p>
+
+<p>For any reason you might want that. Be it artistic, or you want to upload an MP3 to Youtube, Vimeo, or DailyMotion...</p>
+
+<p>Using it is free.</p>
+
+<h3>Usage</h3>
+
+<p>It's pretty simple:</p>
+
+<ul>
+<li>Go on a homepage and upload MP3 file and photo.</li>
+<li>We will make our robots create your video.</li>
+<li>You can stay on your page and wait for the video, or we will send you an email with link (we will not keep your email for any other reason).</li>
+<li>Download your video.</li>
+<li>Come back to us when you want to create new video!</li>
+</ul>
+
+<p>Note: if you don't pick up your video you should know that we will delete all we know about your request after one day has passed.</p>
+
+<h3>Techonology</h3>
+
+<p>This service is powered by <a href="http://flask.pocoo.org/">Flask</a>, a Python micro-framework. <a href="http://www.celeryproject.org/">Celery</a> does all the heavy-lifting, using <a href="http://www.rabbitmq.com/">RabbitMQ</a> as a broker. <a href="http://supervisord.org/">Supervisor</a> takes care that everything is properly running. There are no social media buttons or tracking links or analytics JavaScript spyware.</p>
+
+<h3>Statistics</h3>
+
+<p>Videos created: {{ stats['created'] }}</p>
+<p>Videos downloaded: {{ stats['downloaded'] }}</p>
+<p>Currently active: {{ stats['active'] }}</p>
+<p>Data uploaded: {{ stats['data_upload'] }}</p>
+
 {% endblock %}
