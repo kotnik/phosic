@@ -38,7 +38,7 @@ def calculate_statistics():
 
     # Sum data uploaded.
     stats['data_upload'].value = 0
-    for job in models.Job.query.filter_by(state=models.JOB_FINISHED).all():
+    for job in models.Job.query.filter_by(state=((models.JOB_FINISHED) | (models.JOB_DELETED))).all():
         stats['data_upload'].value = stats['data_upload'].value + job.vid_size * job.download_count
 
     db.session.commit()
