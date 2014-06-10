@@ -34,7 +34,7 @@ def calculate_statistics():
     stats['downloaded'].value = "%s" % s_downloaded
 
     # Count active videos.
-    s_active = models.Job.query.filter((models.Job.state == models.JOB_PENDING) | (models.Job.state == models.JOB_STARTED)).count()
+    s_active = models.Job.query.filter((models.Job.state == models.JOB_PENDING) | (models.Job.state == models.JOB_STARTED) | (models.Job.state == models.JOB_FINISHED)).count()
     stats['active'] = s_active
 
     # Sum data uploaded.
@@ -47,7 +47,7 @@ def calculate_statistics():
 
 @celery.task()
 def delete_expired():
-    for job in models.Job.query.filter((models.Job.state == models.JOB_FINISHED) & (models.Job.expires > datetime.datetime.utcnow())).all():
+    for job in models.Job.query.filter((models.Job.state == models.JOB_FINISHED) & (models.Job.expires < datetime.datetime.utcnow())).all():
         job.state = models.JOB_DELETED
         job.deleted = datetime.datetime.utcnow()
         db.session.commit()

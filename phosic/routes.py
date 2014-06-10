@@ -43,7 +43,7 @@ def home():
             task_uuid=task.id,
             email=form.email.data,
             created=datetime.datetime.utcnow(),
-            expires=datetime.datetime.utcnow() + datetime.timedelta(days=1),
+            expires=datetime.datetime.utcnow() + datetime.timedelta(minutes=app.config["PHOSIC_JOB_EXPIRY_MINUTES"]),
             mp3_name=mp3_filename[:255],
             pic_name=pic_filename[:255],
         )
@@ -66,6 +66,9 @@ def jobs(job_id):
         if task.get():
             if os.path.exists(jobdir + job_id + ".mkv") and job.state != models.JOB_FAILED:
                 return render_template('job-ready.html', job=job)
+            elif job.state == models.JOB_DELETED:
+                return render_template('job-deleted.html', job=job)
+
         return render_template('job-failed.html', job=job)
 
     return render_template('job-pending.html', job=job, started=True if job.state == models.JOB_STARTED else False)

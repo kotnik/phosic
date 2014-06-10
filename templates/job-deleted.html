@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block js %}
+{% endblock %}
+
+{% block main %}
+
+<div class="alert alert-danger">Your video has expired!</div>
+
+<p>This video has expired and we deleted all we knew about it from our servers!</p>
+
+<p>But do not despair, go and <a href="/">create a new one</a> now!</p>
+
+{% if config["DEBUG"] %}
+{% include 'job-info.html' %}
+{% endif %}
+
+{% endblock %}
