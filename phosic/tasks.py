@@ -25,7 +25,7 @@ def calculate_statistics():
             db.session.add(stats[stat_name])
 
     # Count created videos.
-    s_created = models.Job.query.filter_by(state=models.JOB_FINISHED).count()
+    s_created = models.Job.query.filter_by(state=((models.JOB_FINISHED) | (models.JOB_DELETED))).count()
     stats['created'].value = "%s" % s_created
 
     # Sum downloads.
