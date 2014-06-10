@@ -4,6 +4,7 @@
 import os
 
 from flask import Flask
+from flask_debugtoolbar import DebugToolbarExtension
 from flask.ext.sqlalchemy import SQLAlchemy
 from celery import Celery
 
@@ -37,6 +38,9 @@ def make_celery(app=None):
 
 # Flask application.
 app = make_app()
+
+# Debugging.
+toolbar = DebugToolbarExtension(app)
 
 # Celery.
 celery = make_celery(app)
