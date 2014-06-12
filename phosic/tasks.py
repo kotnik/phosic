@@ -70,6 +70,7 @@ def make_video(job_id, pic, mp3, out):
 
         # Lower the picture resolution.
         check_call([ "/usr/bin/convert", pic, "-resize", "640", pic ])
+        check_call([ "/usr/bin/convert", pic, "-geometry", "x480", pic ])
 
         check_call([ "/usr/bin/ffmpeg", "-loop", "1",
                      "-i", pic, "-i", mp3,
