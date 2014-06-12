@@ -68,6 +68,9 @@ def make_video(job_id, pic, mp3, out):
         job.state = models.JOB_STARTED
         db.session.commit()
 
+        # Lower the picture resolution.
+        check_call([ "/usr/bin/convert", pic, "-resize", "640", pic ])
+
         check_call([ "/usr/bin/ffmpeg", "-loop", "1",
                      "-i", pic, "-i", mp3,
                      "-shortest", "-c:v", "libx264", "-c:a", "copy",
