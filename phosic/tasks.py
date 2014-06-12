@@ -71,6 +71,7 @@ def make_video(job_id, pic, mp3, out):
         check_call([ "/usr/bin/ffmpeg", "-loop", "1",
                      "-i", pic, "-i", mp3,
                      "-shortest", "-c:v", "libx264", "-c:a", "copy",
+                     "-profile:v", "baseline", "-level:v", "1.0",
                      "-tune", "stillimage", out ])
 
         job.vid_size = os.path.getsize(out)
