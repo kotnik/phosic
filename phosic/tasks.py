@@ -71,7 +71,16 @@ def make_video(job_id, pic, mp3, out):
         # Lower the picture resolution.
         check_call([ "/usr/bin/convert", pic, "-resize", "640", "%s.jpg" % pic ])
         pic = "%s.jpg" % pic
-        check_call([ "/usr/bin/convert", pic, "-geometry", "x480", pic ])
+
+        pic_ident = check_call([ "/usr/bin/identify", pic ])
+        try:
+            hor_res = pic_ident.split(" ")[2].split("x")[1]
+        except IndexError:
+            check_call([ "/usr/bin/convert", pic, "-resize", "640x480!", pic ])
+
+        if int(hor_res) % 2 != 0:
+            new_res = int(hor_res) + 1
+            check_call([ "/usr/bin/convert", pic, "-resize", "640x%s!" % new_res, pic ])
 
         check_call([ "/usr/bin/ffmpeg", "-loop", "1",
                      "-i", pic, "-i", mp3,
