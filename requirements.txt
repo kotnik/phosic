@@ -14,7 +14,7 @@ sqlalchemy-migrate
 # ----------------------
 # Celery
 # ----------------------
-celery
+celery[redis]
 
 # ----------------------
 # Helpers
