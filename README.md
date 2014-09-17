@@ -16,4 +16,3 @@ Then use the script in `bin` folder to run it:
     ./bin/run.sh
 
 After that you can access the website at http://localhost:8000
-
