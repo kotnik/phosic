@@ -4,6 +4,5 @@
 *.py[co]
 
 app.db
-uploads/*
 
 celerybeat-schedule
